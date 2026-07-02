@@ -108,3 +108,4 @@ Thumbs.db
 *.userosscache
 *.sln
 *.swp
+.sovereign-local
