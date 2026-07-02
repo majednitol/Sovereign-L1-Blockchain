@@ -1,10 +1,5 @@
 # Sovereign L1 — Phase 1: Chain Scaffold & Genesis Configuration
 
-> **Branch:** `phase-1`
-> **Status:** 21 / 23 tasks complete · 2 scaffold stubs (deferred to Phase 2) · 0 missing
-
-
-
 ---
 
 ## What Is Sovereign L1?
