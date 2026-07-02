@@ -3,9 +3,7 @@
 > **Branch:** `phase-1`
 > **Status:** 21 / 23 tasks complete · 2 scaffold stubs (deferred to Phase 2) · 0 missing
 
-```bash
-git clone --single-branch --branch phase-1 --depth 1 https://github.com/majednitol/Sovereign.git
-```
+
 
 ---
 
