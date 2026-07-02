@@ -1,0 +1,59 @@
+name: Sovereign L1 CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  ci-pipeline:
+    name: Continuous Integration Pipeline
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Current Code
+        uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.25.5'
+          cache: true
+
+      # 1. Lint (Go only)
+      - name: Run golangci-lint
+        uses: golangci/golangci-lint-action@v6
+        with:
+          version: v1.60
+
+      # 1.1 Protobuf Lint
+      - name: Run Buf Lint
+        uses: bufbuild/buf-lint-action@v1
+
+      # 1.2 Protobuf Breaking Change Check
+      - name: Run Buf Breaking Check
+        uses: bufbuild/buf-breaking-action@v1
+        with:
+          against: 'https://github.com/majednitol/Sovereign-L1-Blockchain.git#branch=master'
+
+      # 2. Test (Go chain and e2e tests)
+      - name: Run Workspace Tests
+        run: |
+          make test
+
+      # 3. Build (Compile chaind daemon)
+      - name: Build Project Binaries
+        run: |
+          make build
+
+      # 4. SimApp Simulation (Randomized simulation run)
+      - name: Run SimApp Randomized Simulation
+        run: |
+          # Generate a randomized seed and log it for reproducibility
+          SEED=$RANDOM
+          echo "========================================="
+          echo "Running SimApp simulation with randomized seed: $SEED"
+          echo "========================================="
+          go test -v ./chain/app -run TestAppSimulation -NumBlocks=500 -BlockSize=200 -Seed=$SEED
+
+
